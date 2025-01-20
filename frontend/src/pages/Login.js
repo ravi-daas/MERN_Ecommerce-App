@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
-import React, { useState} from "react";
+import React, { useState, useEffect } from "react";
 
 
 function Login() {
@@ -58,6 +58,10 @@ function Login() {
     // useEffect(() => {
     //     setErrors(validate());
     // }, [email, password]);
+
+    useEffect(() => {
+        document.title = "Login - Shopkart"
+    }, []);
 
     return <>
         <div class="flex items-center justify-center h-svh bg-black">

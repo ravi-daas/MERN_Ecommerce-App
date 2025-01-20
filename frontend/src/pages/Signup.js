@@ -2,20 +2,20 @@ import { Link } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
-import React, { useState, } from "react";
+import React, { useState, useEffect } from "react";
+import { signup } from '../utils/api';
 
 
-function Login() {
+function Signup() {
 
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log("Email:", email);
-        // console.log("Password:", password);
         // Add validation or API call logic here
 
         const validationErrors = validate();
@@ -23,8 +23,22 @@ function Login() {
             setErrors(validationErrors);
         } else {
             setErrors({});
+            setLoading(true);
             console.log("Form submitted:", { email, password });
             // Add API call or login logic here
+
+            try {
+                const data = await signup(email, password); // Call the API function
+                console.log("Signup successful:", data);
+                alert("Signup successful!");
+            } catch (error) {
+                const errorMap = JSON.parse(error.message); // Parse the error map
+                setErrors(errorMap); // Set the error map to the state
+                console.error("Signup failed:", error.message);
+            } finally {
+                setLoading(false);
+            }
+
         }
     };
 
@@ -43,21 +57,9 @@ function Login() {
         return errors;
     };
 
-    // // // Handle email change and validation
-    // const handleEmailChange = (e) => {
-    //     setEmail(e.target.value);
-    //     setErrors(validate());
-    // };
-
-    // // Handle password change and validation
-    // const handlePasswordChange = (e) => {
-    //     setPassword(e.target.value);
-    //     setErrors(validate());
-    // };
-
-    // useEffect(() => {
-    //     setErrors(validate());
-    // }, [email, password]);
+    useEffect(() => {
+        document.title = "Signup - Shopkart"
+    }, []);
 
     return <>
         <div class="flex items-center justify-center h-svh bg-black">
@@ -66,12 +68,14 @@ function Login() {
                     <p className="text-3xl">Shopkart</p>
                 </Link>
                 <form onSubmit={handleSubmit} className="flex flex-col justify-start p-8 text-black">
+                    {errors.general && (
+                        <p className="text-red-500 text-sm text-left mb-4">{errors.general}</p>
+                    )}
                     <div className='mb-4'>
                         <input
-                            type="email"
+                            type="text"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            // onChange={handleEmailChange}
                             placeholder="Email"
                             className="p-2 rounded-lg bg-slate-800 text-white w-full focus:outline-none"
                         />
@@ -82,7 +86,6 @@ function Login() {
                             type={showPassword ? "text" : "password"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            // onChange={handlePasswordChange}
                             placeholder="Password"
                             className="p-2 rounded-lg bg-slate-800 text-white w-full focus:outline-none"
                         />
@@ -90,7 +93,7 @@ function Login() {
                         {errors.password && <p className="text-red-500 text-sm text-left mt-1">{errors.password}</p>}
                     </div>
                     <button type="submit" className="bg-blue-500 p-2 mt-4 rounded-xl text-white font-semibold hover:bg-blue-600 transition">
-                        Sign up
+                        {loading ? "Signing up..." : "Sign up"}
                         <span className="pl-2">🚀</span>
                     </button>
                 </form>
@@ -112,4 +115,4 @@ function Login() {
     </>;
 }
 
-export default Login;
+export default Signup;

@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const authRoutes = require('./routes/authRoutes');
 const ErrorHandler = require('./middlewares/errorHandler');
 const { connection } = require('./services/connection');
 
@@ -18,7 +19,10 @@ app.use(cors({
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+connection();
+
 // Routes
+app.use(authRoutes);
 app.use(userRoutes);
 app.use(ErrorHandler);
 
