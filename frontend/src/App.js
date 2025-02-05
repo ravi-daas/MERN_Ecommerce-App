@@ -85,7 +85,7 @@ import About from './pages/About';
 import Products from './pages/Products';
 import Signup from './pages/Signup';
 import Allproducts from './pages/admin/allProduct';
-import AddProductModal from './components/AddProductModal';
+import AccountPage from './pages/Account';
 
 function App() {
   return (
@@ -97,8 +97,9 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/about" element={<About />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/account" element={<AccountPage />} />
+          {/* Admin Routes */}
           <Route path="/admin/products" element={<Allproducts />} />
-          <Route path="/prod" element={<AddProductModal />} />
         </Routes>
       </div>
     </Router>

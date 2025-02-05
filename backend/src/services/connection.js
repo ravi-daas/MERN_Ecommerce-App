@@ -7,7 +7,8 @@ const url = process.env.url;
 const connection = () => {
     mongoose.connect(url).then(() => {
         console.log("database connected successfully");
-    }).catch(() => {
+    }).catch((err) => {
+        console.log(err);
         console.log("database not connected");
     })
 }

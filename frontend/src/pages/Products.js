@@ -1,7 +1,10 @@
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 
+import React, { useState, useEffect } from "react";
+
 function Products() {
+
     return <>
         <Navbar />
         <div className="mx-20 mb-10 mt-10 font-bold text-3xl">All Products</div>
@@ -43,7 +46,7 @@ function Products() {
                         Add to Cart
                     </span>
                     <img src="https://cdn.prod.website-files.com/63e857eaeaf853471d5335ff/63e9df775b939f51a0b22f6d_Icon.svg" className="hover:bg-red-500 p-2 rounded-2xl bg-[rgb(217,222,229)]" alt="photu" />
-                    
+
                 </div>
             </div>
             <div className="border-2 rounded-3xl p-1 border-[rgb(201, 197, 197)] pb-2">

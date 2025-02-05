@@ -1,10 +1,16 @@
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { Link } from 'react-router-dom';
+import { Link} from 'react-router-dom';
+import React, { useEffect } from "react";
 
 function Home() {
+
+    useEffect(() => {
+        document.title = "Shopkart"
+    }, []);
+
     return <>
-        <Navbar />
+        <Navbar/>
         <img src="home.png" alt="" />
         <div className="mx-20 mb-10 mt-20 font-bold text-3xl">Shop Our Top Categories</div>
         <div className="flex justify-between mx-20 flex-wrap gap-5">

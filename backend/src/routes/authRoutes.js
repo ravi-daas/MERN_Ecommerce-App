@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { signup } = require('../controllers/authController');
+const { signup, login, logout } = require('../controllers/authController');
 const { validateSignup, handleValidationErrors } = require('../middlewares/validators');
+// const { verifyToken } = require('../middlewares/verifyToken');
 
 // router.post('/signup', (req, res, next) => {
 //     try {
@@ -29,5 +30,8 @@ const { validateSignup, handleValidationErrors } = require('../middlewares/valid
 
 // POST /api/signup
 router.post('/signup', validateSignup, handleValidationErrors, signup);
+router.post('/login', validateSignup, handleValidationErrors, login);
+router.post('/logout', logout);
+// router.get('/checkUser', verifyToken, checkUser);
 
 module.exports = router;

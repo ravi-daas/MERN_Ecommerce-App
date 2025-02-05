@@ -1,18 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
 import React, { useState, useEffect } from "react";
+import { login } from '../utils/api';
 
 
 function Login() {
-
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // console.log("Email:", email);
         // console.log("Password:", password);
@@ -23,8 +25,26 @@ function Login() {
             setErrors(validationErrors);
         } else {
             setErrors({});
+            setLoading(true);
             console.log("Form submitted:", { email, password });
             // Add API call or login logic here
+
+            try {
+                const data = await login(email, password); // Call the API function
+
+                if (data.message == 'User Logged In Successfully') {
+                    sessionStorage.setItem('isLoggedIn', true);
+                    sessionStorage.setItem('role', data.user.role);
+                    sessionStorage.setItem('email', data.user.email);
+                    navigate('/');
+                }
+            } catch (error) {
+                const errorMap = JSON.parse(error.message); // Parse the error map
+                setErrors(errorMap); // Set the error map to the state
+                console.error("Signup failed:", error.message);
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -67,9 +87,12 @@ function Login() {
         <div class="flex items-center justify-center h-svh bg-black">
             <div class="w-96 text-center rounded-lg flex flex-col justify-around bg-black text-white border-2 border-gray-800 py-8">
                 <Link to='/'>
-                    <p className="text-3xl">Shopkart</p>
+                    <p className="text-3xl">Shopkart - Login</p>
                 </Link>
                 <form onSubmit={handleSubmit} className="flex flex-col justify-start p-8 text-black">
+                    {errors.general && (
+                        <p className="text-red-500 text-sm text-left mb-4">{errors.general}</p>
+                    )}
                     <div className='mb-4'>
                         <input
                             type="email"

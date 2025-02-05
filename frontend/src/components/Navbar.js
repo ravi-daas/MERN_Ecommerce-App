@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Navbar() {
     const [query, setQuery] = useState('');
+    const [login, setLoggedIn] = useState(false);
 
     const handleSearch = (e) => {
         e.preventDefault();
         console.log('Search Query:', query);
+
         // Add logic to perform search or navigate to search results page
     };
+
+    useEffect(() => {
+        const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+        setLoggedIn(isLoggedIn != null);
+    })
 
     return <>
         <ul className="p-5 rounded cursor-pointer flex flex-wrap justify-around items-center h-20 bg-gradient-to-r from-purple-500 to-pink-500">
@@ -84,16 +91,20 @@ function Navbar() {
                     </svg>
                 </button>
             </form>
-            <Link to='/login'>
-
-                <div className="flex">
-                    {/* <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                    </svg> */}
-                    <img src='https://cdn.prod.website-files.com/63e857eaeaf853471d5335ff/63eb3dec9d6ee83660ebe1de_user.png' className='' alt='' />
-                    <li className="pl-2">Account</li>
-                </div>
-            </Link>
+            {login ?
+                <Link to='/account'>
+                    <div className="flex">
+                        <img src='https://cdn.prod.website-files.com/63e857eaeaf853471d5335ff/63eb3dec9d6ee83660ebe1de_user.png' className='' alt='' />
+                        <li className="pl-2">Account</li>
+                    </div>
+                </Link>
+                : <Link to='/login'>
+                    <div className="flex">
+                        <img src='https://cdn.prod.website-files.com/63e857eaeaf853471d5335ff/63eb3dec9d6ee83660ebe1de_user.png' className='' alt='' />
+                        <li className="pl-2">Login</li>
+                    </div>
+                </Link>
+            }
             <div className="text-center">
                 <Link to="/products">
                     <button className="p-2 bg-blue-500 text-white rounded">Explore More Products</button>

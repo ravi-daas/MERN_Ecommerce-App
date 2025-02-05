@@ -1,19 +1,36 @@
 import { IoAddOutline } from "react-icons/io5";
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { IoSearchOutline } from "react-icons/io5";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { MdDeleteForever } from "react-icons/md";
 import AddProductModal from '../../components/AddProductModal';
-
-// function Navbar() {
+import { adminPage } from "../../utils/api";
 
 function Allproducts() {
     const [query, setQuery] = useState('');
+    const navigate = useNavigate();
 
-    const handleSearch = (e) => {
+    const handleSearch = async (e) => {
         e.preventDefault();
         console.log('Search Query:', query);
+
+        // const data = await adminPage();
+
+        // if (data.status === 200) {
+
+        // } else if (data.status === 401) {
+        //     navigate('/');
+        // }
+
+        // console.log(data);
+
+        // if (data.message === 'Ok') {
+        //     // navigate('/admin');
+        // } else {
+        //     navigate('/login');
+        // }
+
         // Add logic to perform search or navigate to search results page
     };
 
@@ -30,6 +47,19 @@ function Allproducts() {
 
     useEffect(() => {
         document.title = "Admin Page"
+
+        const checkAdmin = async () => {
+
+            const data = await adminPage();
+
+            if (data.status === 200) {
+
+            } else if (data.status === 401) {
+                navigate('/');
+            }
+        }
+
+        checkAdmin();
     }, []);
 
     return <>

@@ -22,8 +22,10 @@ const signup = async (email, password) => {
                 }
             });
             throw new Error(JSON.stringify(errorMap));
+        } else if (response.status === 201) {
+            return data;
         }
-        return data;
+        // return data;
     } catch (error) {
         console.error("Error in signup API:", error.message);
         throw error;
@@ -32,24 +34,63 @@ const signup = async (email, password) => {
 
 const login = async (email, password) => {
     try {
-        const response = await fetch(`${API_BASE_URL}/signup`, {
+        const response = await fetch(`${API_BASE_URL}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ email, password }),
+            credentials: "include",
         });
 
-        if (!response.ok) {
-            throw new Error("Failed to sign up. Please try again.");
-        }
+        const data = await response.json();
 
-        return await response.json();
+        console.log(data);
+
+        if (response.status === 401) {
+            const errorData = await data; // Parse the error response
+            const errorMap = {};
+            errorData.errors.forEach((error) => {
+                if (!errorMap[error.path]) {
+                    errorMap[error.path] = error.msg;
+                }
+            });
+            throw new Error(JSON.stringify(errorMap));
+        } else if (response.status === 200) {
+            return data;
+        } else if (response.status === 500) {
+            throw new Error(JSON.stringify({ general: 'Internal Server Error, Try again' }));
+        }
     } catch (error) {
         console.error("Error in signup API:", error.message);
         throw error;
     }
 };
 
-export { signup, login };
-;
+const adminPage = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/admin/products`, {
+            method: "GET",
+            credentials: "include",
+        });
+        return response;
+    } catch (error) {
+        console.error("Error in signup API:", error.message);
+        throw error;
+    }
+};
+
+const logout = async () => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/logout`, {
+            method: "POST",
+            credentials: "include",
+        });
+        return response;
+    } catch (error) {
+        console.error("Error in signup API:", error.message);
+        throw error;
+    }
+}
+
+export { signup, login, adminPage, logout };

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
@@ -8,6 +8,8 @@ import { signup } from '../utils/api';
 
 function Signup() {
 
+    // for Navigation outside jsx or in functions
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -29,8 +31,13 @@ function Signup() {
 
             try {
                 const data = await signup(email, password); // Call the API function
-                console.log("Signup successful:", data);
-                alert("Signup successful!");
+                // console.log("Signup successful:", data);
+                // alert("Signup successful!");
+
+                if (data.message === 'User registered successfully') {
+                    // <Link to='/login'></Link>
+                    navigate('/login');
+                }
             } catch (error) {
                 const errorMap = JSON.parse(error.message); // Parse the error map
                 setErrors(errorMap); // Set the error map to the state
@@ -65,7 +72,7 @@ function Signup() {
         <div class="flex items-center justify-center h-svh bg-black">
             <div class="w-96 text-center rounded-lg flex flex-col justify-around bg-black text-white border-2 border-gray-800 py-8">
                 <Link to='/'>
-                    <p className="text-3xl">Shopkart</p>
+                    <p className="text-3xl">Shopkart - Signup</p>
                 </Link>
                 <form onSubmit={handleSubmit} className="flex flex-col justify-start p-8 text-black">
                     {errors.general && (
